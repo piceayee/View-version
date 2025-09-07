@@ -3,13 +3,6 @@ let stopLoadingGitHub = localStorage.getItem("stopLoadingGitHub") === "true";
 let map;
 let markers = []; // 儲存所有標記
 
-document.addEventListener("DOMContentLoaded", function() {
-    const modal = document.getElementById("imageModal");
-    if (modal) {
-        modal.style.display = "none"; // 確保 modal 預設隱藏
-    }
-});
-
 // 📌 JSON 檔案 URL 列表，放在全域範圍以確保所有函式都能存取
 const jsonUrls = [
     "https://piceayee.github.io/jsonhome/data/0310A.json",
@@ -93,12 +86,13 @@ function addMarkerToMap(markerData) {
         }
     }
     
+    // ✅ 修正 Google Maps URL 格式
     let popupContent = `
         <div class="popup-content">
             <strong>${markerData.name}</strong><br>
             <img src="${markerData.image}" class="popup-image" onload="updatePopupStyle(this);"><br>
             📅 拍攝日期: ${markerData.date || "未知日期"}<br>
-            <a href="https://www.google.com/maps/search/?api=1&query=${markerData.latitude},${markerData.longitude}" target="_blank" class="gps-link">
+            <a href="https://www.google.com/maps?q=${markerData.latitude},${markerData.longitude}" target="_blank" class="gps-link">
                 GPS: ${markerData.latitude.toFixed(5)}, ${markerData.longitude.toFixed(5)}
             </a>
         </div>
