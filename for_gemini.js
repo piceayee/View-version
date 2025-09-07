@@ -8,6 +8,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+// 📌 JSON 檔案 URL 列表，放在全域範圍以確保所有函式都能存取
+const jsonUrls = [
+    "https://piceayee.github.io/jsonhome/data/0310A.json",
+    "https://piceayee.github.io/jsonhome/data/0310B.json",
+    "https://piceayee.github.io/jsonhome/data/edit1-1.json",
+    "https://piceayee.github.io/jsonhome/data/edit2-1.json",
+    "https://piceayee.github.io/jsonhome/data/edit3-1.json"
+];
+
+// 📌 載入標記的函式，放在全域範圍
+async function loadAllMarkersFromGitHub() {
+    if (stopLoadingGitHub) {
+        console.log("⏹️ 已按下清除標記，停止載入 GitHub JSON");
+        return;
+    }
+    console.log("📥 開始並行載入所有 JSON 檔案...");
+    try {
+        const fetchPromises = jsonUrls.map(url => fetch(url).then(response => {
+            if (!response.ok) throw new Error(`❌ 無法獲取 JSON: ${url}`);
+            return response.json();
+        }));
+        const allData = await Promise.all(fetchPromises);
+        console.log("✅ 所有 JSON 檔案載入完成！");
+        allData.forEach(data => {
+            if (!Array.isArray(data)) {
+                console.error("❌ JSON 格式錯誤，應該是陣列", data);
+                return;
+            }
+            data.forEach(markerData => addMarkerToMap(markerData));
+        });
+    } catch (error) {
+        console.error("❌ 載入 JSON 失敗：", error);
+    }
+}
+
 // 這個函式必須在 window.onload 外面，才能被 HTML 的 onload 屬性存取
 function updatePopupStyle(img) {
     // 獲取當前圖片所在的 Leaflet 彈窗實例
@@ -70,39 +105,7 @@ window.onload = function() {
 
     // 移除所有上傳、壓縮、GPS 相關函式 (showNotification, extractPhotoDate, fileInput.addEventListener, compressImage, promptForGPS, convertDMSToDD, saveMarker)
     
-    const jsonUrls = [
-        "https://piceayee.github.io/jsonhome/data/0310A.json",
-        "https://piceayee.github.io/jsonhome/data/0310B.json",
-        "https://piceayee.github.io/jsonhome/data/edit1-1.json",
-        "https://piceayee.github.io/jsonhome/data/edit2-1.json",
-        "https://piceayee.github.io/jsonhome/data/edit3-1.json"
-    ];
 
-    // 優化：使用 Promise.all() 並行載入所有 JSON，提升載入速度
-    async function loadAllMarkersFromGitHub() {
-        if (stopLoadingGitHub) {
-            console.log("⏹️ 已按下清除標記，停止載入 GitHub JSON");
-            return;
-        }
-        console.log("📥 開始並行載入所有 JSON 檔案...");
-        try {
-            const fetchPromises = jsonUrls.map(url => fetch(url).then(response => {
-                if (!response.ok) throw new Error(`❌ 無法獲取 JSON: ${url}`);
-                return response.json();
-            }));
-            const allData = await Promise.all(fetchPromises);
-            console.log("✅ 所有 JSON 檔案載入完成！");
-            allData.forEach(data => {
-                if (!Array.isArray(data)) {
-                    console.error("❌ JSON 格式錯誤，應該是陣列", data);
-                    return;
-                }
-                data.forEach(markerData => addMarkerToMap(markerData));
-            });
-        } catch (error) {
-            console.error("❌ 載入 JSON 失敗：", error);
-        }
-    }
 
     loadAllMarkersFromGitHub();
     let markers = []; // 儲存所有標記
