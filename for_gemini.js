@@ -103,12 +103,6 @@ window.onload = function() {
         console.log("⏹️ 已按過 `clearMarkers`，不載入 GitHub JSON");
     }
 
-    // 移除所有上傳、壓縮、GPS 相關函式 (showNotification, extractPhotoDate, fileInput.addEventListener, compressImage, promptForGPS, convertDMSToDD, saveMarker)
-    
-
-
-    loadAllMarkersFromGitHub();
-    let markers = []; // 儲存所有標記
 
     function getCategoryClass(category) {
         switch (category) {
