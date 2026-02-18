@@ -4,11 +4,11 @@ let markers = []; // 儲存所有標記
 
 // 📌 JSON 檔案 URL 列表
 const jsonUrls = [
-    "https://piceayee.github.io/jsonhome/data/0310A.json",
-    "https://piceayee.github.io/jsonhome/data/0310B.json",
-    "https://piceayee.github.io/jsonhome/data/edit1-1.json",
+    //"https://piceayee.github.io/jsonhome/data/0310A.json",
+  //  "https://piceayee.github.io/jsonhome/data/0310B.json",
+    //"https://piceayee.github.io/jsonhome/data/edit1-1.json",
     "https://piceayee.github.io/jsonhome/data/edit2-1.json",
-    "https://piceayee.github.io/jsonhome/data/edit3-1.json"
+    "https://piceayee.github.io/jsonhome/data/0218.json"
 ];
 
 // 📌 載入標記的函式，放在全域範圍
